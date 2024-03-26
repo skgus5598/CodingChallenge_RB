@@ -117,12 +117,12 @@ public class RobotChallenge {
                     scentN = "LOST";
                 }
             }
-            result = location[0] + " " + location[1] + " " + facing + " " + scentN;
-            System.out.println("result : " + result);
+            result += location[0] + " " + location[1] + " " + facing + " " + scentN + "\n";
+
         }
 
 
-
+        System.out.println("result : " + result);
         return result.trim();
     }
 }

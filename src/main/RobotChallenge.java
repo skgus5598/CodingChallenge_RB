@@ -57,7 +57,6 @@ public class RobotChallenge {
                         System.out.println("N) Y+1 :" + location[1]);
                     }
             }
-
         }
         //scent test
         if(location[0] >= 0 && location[0] <=mars[0]){
@@ -68,12 +67,13 @@ public class RobotChallenge {
                 System.out.println("dead : " + scent[0] +", " + scent[1]);
             }
         }
-        System.out.println("location[0] : " + location[0] + ", location[1] : " + location[1]+ ", facing : " + facing);
+
+
         result = location[0] + " " + location[1] + " " + facing + " " + scentN;
         System.out.println("result : " + result);
 
 
-        return result  ;
+        return result.trim()  ;
 
     }
 }

@@ -1,6 +1,6 @@
-# Coding Test Problem Solutions
+# Mars Robot Test Problem Solutions 🙏🏻
 
-This project contains solutions to coding test problems solved using Java in IntelliJ.
+This project contains solutions to coding test problems solved using Java17 in IntelliJ.
 
 ## Usage
 

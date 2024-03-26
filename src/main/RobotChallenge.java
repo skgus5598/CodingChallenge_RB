@@ -9,9 +9,13 @@ public class RobotChallenge {
             LLFFFLFLFL
          */
         //Dead Line : x=5, y=3, x=4&y=0 or y=3
-        int[] scent = new int[2]; // dead coordinates
+        int[] scent = {0,0}; // dead coordinates
+        String scentN = "";
+
         int [] location = {Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1])}; // horse
         //location { 1, 1 }
+
+
         String facing = coordinates[2]; // W
         String[] sides = { "E", "S", "W", "N"};
         int facingIdx = 0;
@@ -53,9 +57,19 @@ public class RobotChallenge {
                         System.out.println("N) Y+1 :" + location[1]);
                     }
             }
+
+        }
+        //scent test
+        if(location[0] >= 0 && location[0] <=mars[0]){
+            if(location[0] == 0 || location[0] == mars[1]){
+                scent[0] = location[0];
+                scent[1] = location[1];
+                scentN = "LOST";
+                System.out.println("dead : " + scent[0] +", " + scent[1]);
+            }
         }
         System.out.println("location[0] : " + location[0] + ", location[1] : " + location[1]+ ", facing : " + facing);
-        result = location[0] + " " + location[1] + " " + facing;
+        result = location[0] + " " + location[1] + " " + facing + " " + scentN;
         System.out.println("result : " + result);
 
 

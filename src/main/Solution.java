@@ -2,10 +2,30 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RobotChallenge {
+public class Solution {
+    public static void main(String[] args) {
+        System.out.println("-----------------------------------");
 
-    public String multiRobots(int[] mars, List<String[][]> robots) {
-        String result = "";
+        /*
+         *  Create Robots
+         *  first{} : { position }
+         *  second{} : { instruction }
+         */
+        int[] mars = {5,3};
+        List<String[][]> robots = new ArrayList<>();
+        robots.add(new String[][]{{"1", "1", "E"},{"R","F","R","F","R","F","R","F"}});
+        robots.add(new String[][]{{"3", "2", "N"},{"F","R","R","F","L","L","F","F","R","R","F","L","L"}});
+        robots.add(new String[][]{{"0", "3", "W"},{"L","L","F","F","F","L","F","L","F","L"}});
+        robots.add(new String[][]{{"1", "3", "E"}, {"F","R","R","F","L","L","L","F"}});
+        robots.add(new String[][]{{"4", "3", "N"}, {"L","F","R","F","L","F","F","R","F"}});
+
+        /* Call function */
+        robotChallengeFunc(mars, robots);
+
+    }
+
+    public static StringBuilder robotChallengeFunc(int[] mars, List<String[][]> robots){
+        StringBuilder result = new StringBuilder();
 
         //Store scent position
         List<int[]> scentList = new ArrayList<>();
@@ -16,13 +36,13 @@ public class RobotChallenge {
 
         String scentSt = ""; //Scent status : "" or "LOST"
         String[] directions = {"E", "S", "W", "N"};
-        String curr_direction = ""; // Current direction
+      //  String curr_direction = ""; // Current direction
 
         for (String[][] robot : robots) {
             //Set default values for each robot's status
             scentSt = "";
             int[] location = new int[]{Integer.parseInt(robot[0][0]), Integer.parseInt(robot[0][1])};
-            curr_direction = robot[0][2];
+            String curr_direction = robot[0][2];
             int curr_direction_idx = 0;
 
             //Find the index of the current direction
@@ -32,7 +52,6 @@ public class RobotChallenge {
                     break;
                 }
             }
-
             //Each movement direction of the robot
             for (String position : robot[1]) {
                 if (position.equals("R")) { // Turn right
@@ -45,12 +64,12 @@ public class RobotChallenge {
                     curr_direction = directions[curr_direction_idx];
                 } else if (position.equals("F")) {
                     // Move forward & avoid scent
-                    int cnt = 0;
+                    int cnt = 0; // to check all scentList
                     for(int[] scent : scentList){
                         if (curr_direction.equals("E")) { // Move East (x+1)
                             if(location[0]+1 != scent[0] || location[1] != scent[1]) { // Check if location meets scent
                                 cnt ++;
-                                if(cnt == scentList.size()){ // Check all scentList and if it doesn't meet, then move
+                                if(cnt == scentList.size()){ // Check all scentList and if it doesn't meet(cnt == scentList.size), then move
                                     location[0]++;
                                 }
                             }
@@ -77,8 +96,8 @@ public class RobotChallenge {
                             }
                         }
                     }
-                    // Check if robot's location is out of the grid
-                    if(location[0] > mars[0] || location[1] > mars[1]){
+                    // Check if robot's location is out of the grid => then add to scentList
+                    if(location[0] > mars[0] || location[1] > mars[1] || location[0] < 0 || location[1] < 0){
                         for(int[] scent : scentList){
                             if(location[0] != scent[0] || location[1] != scent[1]){ // Prevent duplication
                                 tempList.add(new int[]{location[0], location[1]});
@@ -92,9 +111,15 @@ public class RobotChallenge {
                 }
             }
             // Append the result
-            result += location[0] + " " + location[1] + " " + curr_direction + " " + scentSt.trim() + "\n";
+            result.append(location[0]).append(" ")
+                    .append(location[1]).append(" ")
+                    .append(curr_direction).append(" ")
+                    .append(scentSt.trim()).append("\n");
+            //result += location[0] + " " + location[1] + " " + curr_direction + " " + scentSt.trim() + "\n";
         }
 
+        System.out.println("Output : \n" + result );
         return result;
     }
+
 }

@@ -1,7 +1,6 @@
 package test;
 
-import main.RobotChallenge;
-import org.junit.jupiter.api.Assertions;
+import main.Solution;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,12 +8,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RobotChallengeTest {
-
+class SolutionTest {
 
     @Test
-    public void testMultiRobots(){
-        RobotChallenge robotChallenge = new RobotChallenge();
+    public void testSolution(){
+        //RobotChallenge robotChallenge = new RobotChallenge();
         //Given
         int[] mars = {5,3};
         List<String[][]> robots = new ArrayList<>();
@@ -28,9 +26,10 @@ class RobotChallengeTest {
 
         //When
         String expected = "1 1 E \n3 3 N LOST\n2 3 S \n";
-        String actual = robotChallenge.multiRobots(mars, robots);
+        StringBuilder actual = Solution.robotChallengeFunc(mars, robots);
 
         //Then
-        assertEquals(expected, actual);
+        assertEquals(expected, actual.toString());
     }
+
 }

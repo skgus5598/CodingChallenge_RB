@@ -33,7 +33,6 @@ public class Solution {
 
         String scentSt = ""; //Scent status : "" or "LOST"
         String[] directions = {"E", "S", "W", "N"};
-      //  String curr_direction = ""; // Current direction
 
         for (String[][] robot : robots) {
             //Set default values for each robot's status
@@ -61,38 +60,24 @@ public class Solution {
                     curr_direction = directions[curr_direction_idx];
                 } else if (position.equals("F")) {
                     // Move forward & avoid scent
-                    int cnt = 0; // to check all scentList
-                    for(int[] scent : scentList){
-                        if (curr_direction.equals("E")) { // Move East (x+1)
-                            if(location[0]+1 != scent[0] || location[1] != scent[1]) { // Check if location meets scent
-                                cnt ++;
-                                if(cnt == scentList.size()){ // Check all scentList and if it doesn't meet(cnt == scentList.size), then move
-                                    location[0]++;
-                                }
-                            }
-                        } else if (curr_direction.equals("S")) { //( Move South (y-1)
-                            if(location[0] != scent[0] || location[1]-1 != scent[1]) {
-                                cnt++;
-                                if(cnt == scentList.size()){
-                                    location[1]--;
-                                }
-                            }
-                        } else if (curr_direction.equals("W")) { // Move West (x-1)
-                            if(location[0]-1 != scent[0] || location[1] != scent[1]) {
-                                cnt++;
-                                if(cnt == scentList.size()){
-                                    location[0]--;
-                                }
-                            }
-                        } else { // Move North (y+1)
-                            if(location[0] != scent[0] || location[1]+1 != scent[1]) {
-                                cnt++;
-                                if(cnt == scentList.size()){
-                                    location[1]++;
-                                }
-                            }
+                    if (curr_direction.equals("E")) { // Move East (x+1)
+                        if(!checkMeetScent(new int[]{location[0]+1, location[1]}, scentList)){// if it's false then move
+                            location[0]++;
+                        }
+                    } else if (curr_direction.equals("S")) { //( Move South (y-1)
+                        if(!checkMeetScent(new int[]{location[0], location[1]-1}, scentList)){
+                            location[1]--;
+                        }
+                    } else if (curr_direction.equals("W")) { // Move West (x-1)
+                        if(!checkMeetScent(new int[]{location[0]-1, location[1]}, scentList)){
+                            location[0]--;
+                        }
+                    } else { // Move North (y+1)
+                        if(!checkMeetScent(new int[]{location[0], location[1]+1}, scentList)){
+                            location[1]++;
                         }
                     }
+
                     // Check if robot's location is out of the grid => then add to scentList
                     if(location[0] > mars[0] || location[1] > mars[1] || location[0] < 0 || location[1] < 0){
                         boolean isDuplicate = false;
@@ -119,6 +104,15 @@ public class Solution {
 
         System.out.println("Output : \n" + result );
         return result;
+    }
+
+    public static boolean checkMeetScent(int[] location, List<int[]> scentList){
+        for(int[] scent : scentList){
+            if(location[0] == scent[0] && location[1] == scent[1]){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

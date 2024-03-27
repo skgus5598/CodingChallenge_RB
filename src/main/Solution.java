@@ -31,9 +31,6 @@ public class Solution {
         List<int[]> scentList = new ArrayList<>();
         scentList.add(new int[]{-1,-1}); //Initialize temporary default scent position
 
-        ArrayList<int[]> tempList = new ArrayList<>();
-
-
         String scentSt = ""; //Scent status : "" or "LOST"
         String[] directions = {"E", "S", "W", "N"};
       //  String curr_direction = ""; // Current direction
@@ -98,14 +95,16 @@ public class Solution {
                     }
                     // Check if robot's location is out of the grid => then add to scentList
                     if(location[0] > mars[0] || location[1] > mars[1] || location[0] < 0 || location[1] < 0){
+                        boolean isDuplicate = false;
                         for(int[] scent : scentList){
-                            if(location[0] != scent[0] || location[1] != scent[1]){ // Prevent duplication
-                                tempList.add(new int[]{location[0], location[1]});
-                                scentSt = "LOST";
+                            if(location[0] == scent[0] && location[1] == scent[1]){ // Prevent duplication
+                                isDuplicate = true;
+                                break;
                             }
                         }
-                        for(int[] temp : tempList){
-                            scentList.add(temp);
+                        if(!isDuplicate){
+                            scentList.add(new int[]{location[0], location[1]});
+                            scentSt = "LOST";
                         }
                     }
                 }

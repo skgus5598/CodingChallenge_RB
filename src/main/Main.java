@@ -9,29 +9,34 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("-----------------------------------");
 
-        List<RobotDTO> robotList = new ArrayList<>();
+        List<String[][]> robots = new ArrayList<>();
         int[] mars = {5,3};
 
-        RobotDTO robot1 = new RobotDTO();
-        robot1.setCoordinate(new String[]{ "1", "1", "E"});
-        robot1.setPosition(new String[]{ "R","F","R","F","R","F","R","F"});
+        /*
+         *  Create Robots
+         *  first{} : { position }
+         *  second{} : { instruction }
+         */
+        String[][] robot_one = {{"1", "1", "E"},{"R","F","R","F","R","F","R","F"}};
+        String[][] robot_two = {{"3", "2", "N"},{"F","R","R","F","L","L","F","F","R","R","F","L","L"}};
+        String[][] robot_three = {{"0", "3", "W"},{"L","L","F","F","F","L","F","L","F","L"}};
+        String[][] robot_four = {{"1", "3", "E"}, {"F","R","R","F","L","L","L","F"}};
+        String[][] robot_five = {{"4", "3", "N"}, {"L","F","R","F","L","F","F","R","F"}};
+        /*
+         *  Add Robots to List
+         */
+        robots.add(robot_one);
+        robots.add(robot_two);
+        robots.add(robot_three);
+        robots.add(robot_four);
+        robots.add(robot_five);
 
-        RobotDTO robot2 = new RobotDTO();
-        robot2.setCoordinate(new String[]{ "3", "2", "N"});
-        robot2.setPosition(new String[]{"F","R","R","F","L","L","F","F","R","R","F","L","L"});
+        /*
+         * Pass mars & robots as parameters and execute
+         */
 
-        RobotDTO robot3 = new RobotDTO();
-        robot3.setCoordinate(new String[]{ "0", "3", "W"});
-        robot3.setPosition(new String[]{ "L","L","F","F","F","L","F","L","F","L"});
-
-        robotList.add(robot1);
-        robotList.add(robot2);
-        robotList.add(robot3);
-
-        new RobotChallenge().multiRobots(mars, robotList);
-
-      //  String  result = new RobotChallenge().findPositions(mars, coordinate_a, positions_a);
-        System.out.println("-----------------------------------");
+        String result = new RobotChallenge().multiRobots(mars, robots);
+        System.out.println("Output : \n" + result );
 
     }
 

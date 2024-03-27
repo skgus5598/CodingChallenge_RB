@@ -1,128 +1,100 @@
 package main;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class RobotChallenge {
-/*
-    public String findPositions(int[] mars, String[] coordinates, String[] positions){
+
+    public String multiRobots(int[] mars, List<String[][]> robots) {
         String result = "";
 
-        //Scent zone
-        int[] scent = {0,0}; // initialize
-        String scentN = ""; // "" or "LOST"
+        //Store scent position
+        List<int[]> scentList = new ArrayList<>();
+        scentList.add(new int[]{-1,-1}); //Initialize temporary default scent position
 
-        //Initialize robot's location
-        int [] location = {Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1])};
+        ArrayList<int[]> tempList = new ArrayList<>();
 
 
-        String facing = coordinates[2]; //facing side
-        String[] sides = { "E", "S", "W", "N"};
-        int facingIdx = 0;
+        String scentSt = ""; //Scent status : "" or "LOST"
+        String[] directions = {"E", "S", "W", "N"};
+        String curr_direction = ""; // Current direction
 
-        for(int i=0; i < sides.length; i++){ // set up by idx
-            if(facing.equals(sides[i])){
-                facingIdx = i;
-                break;
-            }
-        }
+        for (String[][] robot : robots) {
+            //Set default values for each robot's status
+            scentSt = "";
+            int[] location = new int[]{Integer.parseInt(robot[0][0]), Integer.parseInt(robot[0][1])};
+            curr_direction = robot[0][2];
+            int curr_direction_idx = 0;
 
-        //LL FFF LFLFL
-        for(int i=0; i < positions.length; i++) {
-            if(positions[i].equals("R")){
-                facingIdx ++;
-                if(facingIdx == 4) facingIdx = 0;
-                facing = sides[facingIdx];
-            }else if(positions[i].equals("L")){
-                facingIdx --;
-                if(facingIdx == -1) facingIdx = 3;
-                facing = sides[facingIdx];
-            }else if(positions[i].equals("F")){
-                //moving forward
-                    if(facing.equals("E")){ // x+1
-                        location[0] ++;
-                    }else if(facing.equals("S")){ //y-1
-                        location[1] --;
-                    }else if(facing.equals("W")){ //x-1
-                        location[0] --;
-                    }else{ //N :: y+1
-                        location[1] ++;
-                    }
-            }
-        }
-        //scent test
-        if(location[0] >= 0 && location[0] <=mars[0]){
-            if(location[0] == 0 || location[0] == mars[1]){
-                scent[0] = location[0];
-                scent[1] = location[1];
-                scentN = "LOST";
-            }
-        }
-        result = location[0] + " " + location[1] + " " + facing + " " + scentN;
-        System.out.println("result : " + result);
-        return result.trim()  ;
-    }
-
-*/
-    public String multiRobots(int[] mars, List<RobotDTO> robotList) {
-        String result = "";
-
-        //Scent zone
-        int[] scent = {0, 0}; // initialize
-        String scentN = ""; // "" or "LOST"
-        String[] sides = {"E", "S", "W", "N"};
-        int[] location = new int[2];
-        String facing = "";
-
-        for (RobotDTO robot : robotList) {//
-            scentN = "";
-            location = new int[]{Integer.parseInt(robot.getCoordinate()[0]), Integer.parseInt(robot.getCoordinate()[1])};
-            facing = robot.getCoordinate()[2];
-            int facingIdx = 0;
-
-            for (int i = 0; i < sides.length; i++) {
-                if (facing.equals(sides[i])) {
-                    facingIdx = i;
+            //Find the index of the current direction
+            for (int i = 0; i < directions.length; i++) {
+                if (curr_direction.equals(directions[i])) {
+                    curr_direction_idx = i;
                     break;
                 }
             }
 
-            for (String position : robot.getPosition()) {
-                if (position.equals("R")) {
-                    facingIdx++;
-                    if (facingIdx == 4) facingIdx = 0;
-                    facing = sides[facingIdx];
-                } else if (position.equals("L")) {
-                    facingIdx--;
-                    if (facingIdx == -1) facingIdx = 3;
-                    facing = sides[facingIdx];
+            //Each movement direction of the robot
+            for (String position : robot[1]) {
+                if (position.equals("R")) { // Turn right
+                    curr_direction_idx++;
+                    if (curr_direction_idx == 4) curr_direction_idx = 0; //Rotate directions
+                    curr_direction = directions[curr_direction_idx];
+                } else if (position.equals("L")) { // Turn left
+                    curr_direction_idx--;
+                    if (curr_direction_idx == -1) curr_direction_idx = 3; //Rotate directions
+                    curr_direction = directions[curr_direction_idx];
                 } else if (position.equals("F")) {
-                    //moving forward
-                    if (facing.equals("E")) { // x+1
-                        location[0]++;
-                    } else if (facing.equals("S")) { //y-1
-                        location[1]--;
-                    } else if (facing.equals("W")) { //x-1
-                        location[0]--;
-                    } else { //N :: y+1
-                        location[1]++;
+                    // Move forward & avoid scent
+                    int cnt = 0;
+                    for(int[] scent : scentList){
+                        if (curr_direction.equals("E")) { // Move East (x+1)
+                            if(location[0]+1 != scent[0] || location[1] != scent[1]) { // Check if location meets scent
+                                cnt ++;
+                                if(cnt == scentList.size()){ // Check all scentList and if it doesn't meet, then move
+                                    location[0]++;
+                                }
+                            }
+                        } else if (curr_direction.equals("S")) { //( Move South (y-1)
+                            if(location[0] != scent[0] || location[1]-1 != scent[1]) {
+                                cnt++;
+                                if(cnt == scentList.size()){
+                                    location[1]--;
+                                }
+                            }
+                        } else if (curr_direction.equals("W")) { // Move West (x-1)
+                            if(location[0]-1 != scent[0] || location[1] != scent[1]) {
+                                cnt++;
+                                if(cnt == scentList.size()){
+                                    location[0]--;
+                                }
+                            }
+                        } else { // Move North (y+1)
+                            if(location[0] != scent[0] || location[1]+1 != scent[1]) {
+                                cnt++;
+                                if(cnt == scentList.size()){
+                                    location[1]++;
+                                }
+                            }
+                        }
                     }
-
+                    // Check if robot's location is out of the grid
+                    if(location[0] > mars[0] || location[1] > mars[1]){
+                        for(int[] scent : scentList){
+                            if(location[0] != scent[0] || location[1] != scent[1]){ // Prevent duplication
+                                tempList.add(new int[]{location[0], location[1]});
+                                scentSt = "LOST";
+                            }
+                        }
+                        for(int[] temp : tempList){
+                            scentList.add(temp);
+                        }
+                    }
                 }
             }
-            //scent test
-            if (location[0] >= 0 && location[0] <= mars[0]) {
-                if (location[0] == 0 || location[0] == mars[1]) {
-                    scent[0] = location[0];
-                    scent[1] = location[1];
-                    scentN = "LOST";
-                }
-            }
-            result += location[0] + " " + location[1] + " " + facing + " " + scentN + "\n";
-
+            // Append the result
+            result += location[0] + " " + location[1] + " " + curr_direction + " " + scentSt.trim() + "\n";
         }
 
-
-        System.out.println("result : " + result);
-        return result.trim();
+        return result;
     }
 }

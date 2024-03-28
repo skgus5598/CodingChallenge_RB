@@ -5,7 +5,6 @@ import java.util.List;
 public class Solution {
     public static void main(String[] args) {
         System.out.println("-----------------------------------");
-
         /*
          *  Create Robots
          *  first{} : { position }
@@ -18,14 +17,12 @@ public class Solution {
         robots.add(new String[][]{{"0", "3", "W"},{"L","L","F","F","F","L","F","L","F","L"}});
         robots.add(new String[][]{{"1", "3", "E"}, {"F","R","R","F","L","L","L","F"}});
         robots.add(new String[][]{{"4", "3", "N"}, {"L","F","R","F","L","F","F","R","F"}});
-
         /* Call function */
         robotChallengeFunc(mars, robots);
-
     }
 
     public static StringBuilder robotChallengeFunc(int[] mars, List<String[][]> robots){
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder(); // Store result
 
         //Store scent position
         List<int[]> scentList = new ArrayList<>();
@@ -35,7 +32,7 @@ public class Solution {
         String[] directions = {"E", "S", "W", "N"};
 
         for (String[][] robot : robots) {
-            //Set default values for each robot's status
+            //Set default(empty) values for each robot's status
             scentSt = "";
             int[] location = new int[]{Integer.parseInt(robot[0][0]), Integer.parseInt(robot[0][1])};
             String curr_direction = robot[0][2];
@@ -99,7 +96,6 @@ public class Solution {
                     .append(location[1]).append(" ")
                     .append(curr_direction).append(" ")
                     .append(scentSt.trim()).append("\n");
-            //result += location[0] + " " + location[1] + " " + curr_direction + " " + scentSt.trim() + "\n";
         }
 
         System.out.println("Output : \n" + result );
